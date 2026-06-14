@@ -1,0 +1,93 @@
+# Personal projects (not part of the template)
+PROJECTS/*
+!PROJECTS/.gitkeep
+
+# Archive and inbox
+_ARCHIVE/
+_INBOX_ZIPS/
+_GLOBAL_ASSETS/
+_GLOBAL_SKILLS/
+_REFERENCE_LIBRARY/
+graphify-out/
+
+# Runtime data — per-machine state, never committed
+.claude-flow/data/
+.claude-flow/metrics/
+.claude-flow/performance/
+.claude-flow/security/
+.claude-flow/swarm/
+.swarm/
+*.log
+__pycache__/
+*.pyc
+*.pyo
+
+# Personal memory (keep templates, not actual memory files)
+memory/*.md
+!memory/MEMORY.md
+
+# _MEMORY runtime files (keep templates + decisions)
+_MEMORY/agents/*
+!_MEMORY/agents/.gitkeep
+# Session snapshots are per-machine (auto-generated at /exit + SessionEnd)
+_MEMORY/sessions/
+# Personal project-specific memory (IPs, hostnames, per-machine state)
+_MEMORY/consiliu_*.md
+_MEMORY/device_*.md
+_MEMORY/audit-*.md
+
+# .claude.json backups
+.claude.json.bak.*
+
+# Node modules and package locks (user installs locally)
+node_modules/
+ruflo/
+
+# Personal canvases
+*.canvas
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/settings.json
+.idea/
+
+# Secrets
+.env
+.env.*
+*.pem
+*.key
+
+# Per-machine Claude Code settings (contains local paths, IPs, SSH dirs)
+.claude/settings.local.json
+
+# Personal project journal (per-machine paths)
+PROJECT_LOG.md
+
+# Claude Code auto-generated (session-specific)
+.claude-flow/sessions/
+
+# Generated runtime files at root
+codeburn-*.json
+ruvector.db
+*.db
+
+# Claude flow reports (session-specific)
+.claude-flow/reports/
+
+# Metrics snapshots (contain cost data — keep template only)
+_METRICS/codeburn-*.json
+
+# Runtime-regenerated telemetry (per-machine state, regenerates on first hook)
+_METRICS/_DASHBOARD.md
+_METRICS/codeburn-optimize-latest.md
+_MEMORY/enneagram_adaptive_topology.json
+
+# Auto-memory (session-specific)
+memory/project_*.md
+memory/user_*.md
+memory/feedback_*.md
+memory/reference_*.md

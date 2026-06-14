@@ -1,0 +1,135 @@
+# Browser Agent Configuration
+# AI-powered web browser automation using agent-browser
+#
+# Capabilities:
+# - Web navigation and interaction
+# - AI-optimized snapshots with element refs
+# - Form filling and submission
+# - Screenshot capture
+# - Network interception
+# - Multi-session coordination
+
+name: browser-agent
+description: Web automation specialist using agent-browser with AI-optimized snapshots
+version: 1.0.0
+
+# Routing configuration
+routing:
+  complexity: medium
+  model: sonnet  # Good at visual reasoning and DOM interpretation
+  priority: normal
+  keywords:
+    - browser
+    - web
+    - scrape
+    - screenshot
+    - navigate
+    - login
+    - form
+    - click
+    - automate
+
+# Agent capabilities
+capabilities:
+  - web-navigation
+  - form-interaction
+  - screenshot-capture
+  - data-extraction
+  - network-interception
+  - session-management
+  - multi-tab-coordination
+
+# Tool execution: Bash tool + agent-browser CLI (npm install -g agent-browser)
+# Daemon persists between Bash calls — no restart overhead.
+# Refs (@e1, @e2...) reset on each snapshot — always snapshot before acting.
+#
+# Core pattern:
+#   agent-browser open <url>
+#   agent-browser snapshot -i          # get refs
+#   agent-browser click @e2            # act by ref
+#   agent-browser get text body        # extract
+#
+# Full reference: .claude/skills/agent-browser/SKILL.md
+
+tools:
+  primary: Bash  # all agent-browser commands run via Bash tool
+  cli: agent-browser
+  key_commands:
+    - "open <url>"
+    - "snapshot -i"
+    - "click @eN"
+    - "fill @eN <text>"
+    - "get text body"
+    - "screenshot [--annotate]"
+    - "eval <js>"
+    - "wait <ms|selector>"
+    - "find role <role> click --name <name>"
+    - "tab new | tab N"
+    - "--json snapshot -i"
+
+# Memory configuration
+memory:
+  namespace: browser-sessions
+  persist: true
+  patterns:
+    - login-flows
+    - form-submissions
+    - scraping-patterns
+    - navigation-sequences
+
+# Swarm integration
+swarm:
+  roles:
+    - navigator      # Handles authentication and navigation
+    - scraper        # Extracts data using snapshots
+    - validator      # Verifies extracted data
+    - tester         # Runs automated tests
+    - monitor        # Watches for errors and network issues
+  topology: hierarchical  # Coordinator manages browser agents
+  max_sessions: 5
+
+# Hooks integration
+hooks:
+  pre_task:
+    - route         # Get optimal routing
+    - memory_search # Check for similar patterns
+  post_task:
+    - memory_store  # Save successful patterns
+    - post_edit     # Train on outcomes
+
+# Default configuration
+defaults:
+  timeout: 30000
+  headless: true
+  viewport:
+    width: 1280
+    height: 720
+
+# Example workflows
+workflows:
+  login:
+    description: Authenticate to a website
+    steps:
+      - open: "{url}/login"
+      - snapshot: { interactive: true }
+      - fill: { target: "@e1", value: "{username}" }
+      - fill: { target: "@e2", value: "{password}" }
+      - click: "@e3"
+      - wait: { url: "**/dashboard" }
+      - state-save: "auth-state.json"
+
+  scrape_list:
+    description: Extract data from a list page
+    steps:
+      - open: "{url}"
+      - snapshot: { interactive: true, compact: true }
+      - eval: "Array.from(document.querySelectorAll('{selector}')).map(el => el.textContent)"
+
+  form_submit:
+    description: Fill and submit a form
+    steps:
+      - open: "{url}"
+      - snapshot: { interactive: true }
+      - fill_fields: "{fields}"
+      - click: "{submit_button}"
+      - wait: { text: "{success_text}" }
