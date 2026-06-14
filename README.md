@@ -1,6 +1,6 @@
 # 🚀 CCDEW — Claude Code Development Efficient Workspace
 
-[![tests](https://img.shields.io/badge/tests-147%2F147%20PASS-brightgreen?style=for-the-badge)]() [![audit](https://img.shields.io/badge/audit-38%2F38%20PASS-brightgreen?style=for-the-badge)]() [![suites](https://img.shields.io/badge/suites-22-blue?style=for-the-badge)]() [![version](https://img.shields.io/badge/version-3.8.0-blue?style=for-the-badge)]() [![license](https://img.shields.io/badge/license-MIT-green?style=for-the-badge)]()
+[![tests](https://img.shields.io/badge/tests-147%2F147%20PASS-brightgreen?style=for-the-badge)]() [![audit](https://img.shields.io/badge/audit-38%2F38%20PASS-brightgreen?style=for-the-badge)]() [![suites](https://img.shields.io/badge/suites-22-blue?style=for-the-badge)]() [![version](https://img.shields.io/badge/version-3.8.2-blue?style=for-the-badge)]() [![license](https://img.shields.io/badge/license-MIT-green?style=for-the-badge)]()
 
 > **Drop-in workspace for Claude Code that cuts your token bill by ~76% per prompt, blocks secret leaks before they ship, and audits itself at 5 zoom levels — without slowing you down.**
 
@@ -117,14 +117,102 @@ swarm_init(topology=hierarchical, maxAgents=6, strategy=specialized)
 
 ## Quick start
 
+### 1 — Prerequisites
+
+| Tool | Version | Install |
+|---|---|---|
+| **Claude Code CLI** | latest | `npm install -g @anthropic-ai/claude-code` |
+| **Node.js** | ≥ 18 | [nodejs.org](https://nodejs.org) |
+| **Git** | any | [git-scm.com](https://git-scm.com) |
+| **Python** | ≥ 3.8 | [python.org](https://python.org) — optional, used by Obsidian helpers |
+| **codeburn** | latest | `npm install -g codeburn` — optional, canonical cost data |
+
+`ANTHROPIC_API_KEY` must be set in your environment (Claude Code reads it automatically).
+
+---
+
+### 2 — Clone and verify
+
 ```bash
+# Linux / macOS
 git clone https://github.com/Hermeneuticus-of-things/claude-code-eficient-workspace.git CCDEW
 cd CCDEW
-npm install -g codeburn        # optional, canonical cost data
-npm test                       # 147/147 PASS expected
-npm run audit                  # 38/38 PASS expected
-claude                         # start using
+npm test          # 147/147 PASS expected
+npm run audit     # 38/38 PASS expected
 ```
+
+```powershell
+# Windows (PowerShell)
+git clone https://github.com/Hermeneuticus-of-things/claude-code-eficient-workspace.git CCDEW
+cd CCDEW
+npm test
+npm run audit
+```
+
+Or use the one-line bootstrap scripts:
+
+```bash
+# Linux / macOS
+bash bootstrap-ccdew.sh        # prompts for codeburn install, runs tests + audit
+
+# Windows PowerShell
+.\bootstrap-ccdew.ps1
+```
+
+---
+
+### 3 — Open with Claude Code
+
+```bash
+claude         # run from inside the CCDEW/ folder
+```
+
+Claude Code picks up `.claude/settings.json` automatically — all 13 hooks activate on first launch. No manual hook wiring needed.
+
+---
+
+### 4 — Verify hooks are live
+
+After opening Claude Code, type any prompt. You should see a `system-reminder` like:
+
+```
+[WORKFLOW SUGGESTION] Node 3 (Implementer) | TRIANGLE | SSA:MICRO SAFLA:+0.00
+SPAWN: coder → tester → memory-specialist
+```
+
+If the statusline appears: `💰 $X.XX/$100/d · Nc · 🤖 X% ok` — everything is working.
+
+---
+
+### 5 — First-time tuning (optional)
+
+Edit `.claude/helpers/feature-flags.json`:
+
+```json
+{
+  "components": {
+    "enneagram": true,
+    "ssa": true,
+    "codeburn": true,
+    "safla": true,
+    "secret_scan": true
+  },
+  "codeburn": {
+    "daily_budget_usd": 50.0,
+    "warn_at_pct": 0.75
+  }
+}
+```
+
+Environment variables:
+
+| Variable | Effect |
+|---|---|
+| `ANTHROPIC_API_KEY` | **Required** — your Anthropic API key |
+| `CCDEW_LANG=ro` | Romanian UI strings (partial) |
+| `HOOKS_SKIP=1` | Emergency bypass for git commit/push hooks |
+| `GITHUB_TOKEN` | Raises `/skills-propose` GitHub rate limit 60→5000/h |
+| `PYTHON_BIN` | Explicit Python path if auto-detect fails |
 
 ## Configuration
 
